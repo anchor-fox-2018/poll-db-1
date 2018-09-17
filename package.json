@@ -1,0 +1,21 @@
+{
+  "name": "sqlite-crud",
+  "version": "1.0.0",
+  "description": "SQLite CRUD",
+  "main": "setup.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "aasantoso"
+  },
+  "keywords": [
+    "SQLite"
+  ],
+  "author": "Anastasia Santoso",
+  "license": "ISC",
+  "dependencies": {
+    "sqlite3": "^4.0.2"
+  }
+}
