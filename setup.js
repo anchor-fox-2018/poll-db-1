@@ -12,8 +12,13 @@ const fs = require('fs');
 
 // CSV TO ARRAY
 let politiciansEd = fs.readFileSync('./politicians.csv').toString().split('\n');
+console.log(politiciansEd);
+
 let votersEd = fs.readFileSync('./voters.csv').toString().split('\n');
+console.log(votersEd);
+
 let votesEd = fs.readFileSync('./votes.csv').toString().split('\n');
+console.log(votesEd);
 
 
 // DB SERIALIZE: MAKE EACH FILES
@@ -46,6 +51,72 @@ db.serialize(function() {
         FOREIGN KEY (voterId) REFERENCES voters(id),
         FOREIGN KEY (politicianId) REFERENCES politicians(id)
     )`)
+});
+
+// DB SERIALIZE: PUSH EACH FILE TO TABLE
+db.serialize(function() {
+    
+    // politicians
+    for (let i = 1; i < politiciansEd.length - 1; i++) {
+
+        //testing
+        // console.log(`${politiciansEd[i][0]} ${politiciansEd[i][1]} ${politiciansEd[i][2]} ${politiciansEd[i][3]}`);
+
+        let tempPolitician = politiciansEd[i].split(',');
+
+        db.run(`INSERT INTO politicians (name, party, location, grade_current)
+                VALUES ('${tempPolitician[0]}', '${tempPolitician[1]}', '${tempPolitician[2]}', '${tempPolitician[3]}')`, function (err) {
+                    if (err) {
+                        console.log(err.message);
+                    }
+
+                    else {
+                        console.log('adding politicians: working');
+                    }
+                }
+            )
+    };
+
+    // voters
+    for (let i = 1; i < votersEd.length - 1; i++) {
+
+        //testing
+        // console.log(`${votersEd[i][0]} ${votersEd[i][1]} ${votersEd[i][2]} ${votersEd[i][3]}`);
+
+        let tempVoters = votersEd[i].split(',');
+        
+        db.run(`INSERT INTO voters (first_name, last_name, gender, age)
+                VALUES ('${tempVoters[0]}', '${tempVoters[1]}', '${tempVoters[2]}', '${tempVoters[3]}')`, function (err) {
+                    if (err) {
+                        console.log(err.message);
+                    }
+
+                    else {
+                        console.log('adding voters: working');
+                    }
+                }
+            )
+    };
+
+    // votes
+    for (let i = 1; i < votesEd.length - 1; i++) {
+
+        let tempVotes = votesEd[i].split(',');
+
+        db.run(`INSERT INTO votes (voterId, politicianId)
+                VALUES ('${tempVotes[0]}', '${tempVotes[0]}')`, function (err) {
+                    if (err) {
+                        console.log(err.message);
+                    }
+
+                    else {
+                        console.log('add votes: working');
+                    }
+                }
+            )
+
+    };
+
 });
 
 // close
